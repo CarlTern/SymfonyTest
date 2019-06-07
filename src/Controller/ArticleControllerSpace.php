@@ -10,9 +10,15 @@ use App\Service\MessageGenerator;
 class ArticleControllerSpace extends AbstractController
 {
     /**
-     * @Route(
-     *     "/news/{slug}",
-     * )
+     * @Route("/", name="app_homepage")
+     */
+    public function homePage()
+    {
+        return $this->render('articleSpace/homepage.html.twig');
+    }
+
+    /**
+     * @Route("/news/{slug}", name="article_show")
      */
     public function show($slug)
     {
@@ -22,10 +28,12 @@ class ArticleControllerSpace extends AbstractController
             'Testing comments Testing comments Testing comments Testing comments ',
             'Comments comments Comments comments Comments comments Comments comments',
         ];
+       
 
         return $this->render('articleSpace/show.html.twig', [
             'title' => ucwords(str_replace('-', ' ', $slug)),
             'comments' => $comments,
             ]);
+            
 }
 }
