@@ -16,9 +16,16 @@ class ArticleControllerSpace extends AbstractController
      */
     public function show($slug)
     {
-        return new Response(sprintf(
-            'Future page to show the article: "%s"',
-            $slug
-        ));
+
+        $comments = [
+            'Comment test Comment test Comment test Comment test Comment test ',
+            'Testing comments Testing comments Testing comments Testing comments ',
+            'Comments comments Comments comments Comments comments Comments comments',
+        ];
+
+        return $this->render('articleSpace/show.html.twig', [
+            'title' => ucwords(str_replace('-', ' ', $slug)),
+            'comments' => $comments,
+            ]);
 }
 }
