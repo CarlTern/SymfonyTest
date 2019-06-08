@@ -6,6 +6,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Psr\Log\LoggerInterface;
 use App\Service\MessageGenerator;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ArticleControllerSpace extends AbstractController
 {
@@ -33,7 +34,18 @@ class ArticleControllerSpace extends AbstractController
         return $this->render('articleSpace/show.html.twig', [
             'title' => ucwords(str_replace('-', ' ', $slug)),
             'comments' => $comments,
+            'slug' => $slug,
             ]);
             
 }
+
+/**
+     * @Route("/news/{slug}/heart", name="article_toggle_heart", methods={"POST"})
+     */
+public function toggleArticleHeart($slug, LoggerInterface $logger)
+    {
+    // TODO - actually heart/unheart the article!
+    $logger->info('Article is being hearted!');
+    return new JsonResponse(['hearts' => random_int(5, 100)]);
+    }
 }
