@@ -7,9 +7,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Psr\Log\LoggerInterface;
 use App\Service\MessageGenerator;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Entity\Heart;
 
 class ArticleControllerSpace extends AbstractController
 {
+    var $entityManager;
+
     /**
      * @Route("/", name="app_homepage")
      */
@@ -36,7 +39,24 @@ class ArticleControllerSpace extends AbstractController
             'comments' => $comments,
             'slug' => $slug,
             ]);
+            $entityManager = $this->getDoctrine()->getManager();
+            $hearts = $this->getDoctrine()
+            ->getRepository(Heart::class)
+            ->findOneBy(['name' => 'test']);
             
+            if (!$hearts) {
+                $hearts = new Heart();
+                $hearts->setName(test);
+                $hearts->setHeartr(0);
+                $hearts->setHeartStatus(false);
+            }
+    
+        // tell Doctrine you want to (eventually) save the Product (no queries yet)
+        $this->entityManager->persist($hearts);
+
+        // actually executes the queries (i.e. the INSERT query)
+        $this->entityManager->flush();
+
 }
 
 /**
@@ -46,6 +66,33 @@ public function toggleArticleHeart($slug, LoggerInterface $logger)
     {
     // TODO - actually heart/unheart the article!
     $logger->info('Article is being hearted!');
-    return new JsonResponse(['hearts' => random_int(5, 100)]);
+    
+    return new JsonResponse(['hearts' => $this->heartUpdater()]);
     }
+
+public function heartUpdater()
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $hearts = $this->getDoctrine()
+            ->getRepository(Heart::class)
+            ->findOneBy(['name' => 'test']);
+        if($hearts){
+        if($hearts->getHeartStatus()){
+        $hearts->setHeartStatus(false);
+        $newHeartNumber= $hearts->getHeartr();
+        $newHeartNumber--;
+        $hearts->setHeartr($newHeartNumber);
+        } else if (!$hearts->getHeartStatus){
+            $hearts->setHeartStatus(true);
+            $newHeartNumber= $hearts->getHeartr();
+            $newHeartNumber++;
+            $hearts->setHeartr($newHeartNumber);
+            }
+            $entityManager->flush();
+            return $hearts->getHeartr();
+        }
+        
+    }
+        
+    
 }

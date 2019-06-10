@@ -21,6 +21,16 @@ class Heart
      */
     private $heartr;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $heartStatus;
+
+    /**
+     * @ORM\Column(type="string", length=10)
+     */
+    private $name;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -34,6 +44,30 @@ class Heart
     public function setHeartr(int $heartr): self
     {
         $this->heartr = $heartr;
+
+        return $this;
+    }
+
+    public function getHeartStatus(): ?bool
+    {
+        return $this->heartStatus;
+    }
+
+    public function setHeartStatus(bool $heartStatus): self
+    {
+        $this->heartStatus = $heartStatus;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }
